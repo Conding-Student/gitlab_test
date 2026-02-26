@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"intern_template_v1/middleware"
 	"intern_template_v1/model/errors"
 	"intern_template_v1/model/response"
 	"intern_template_v1/model/status"
@@ -56,4 +57,28 @@ func Insert_name(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(result)
+}
+
+func Get_all_name(c *fiber.Ctx) error {
+	db := middleware.DBConn
+
+	var results []map[string]any
+
+	if err := db.Raw("SELECT * FROM public.sample_table").Scan(&results).Error; err != nil {
+		return c.Status(500).JSON(response.ResponseModel{
+			RetCode: "500",
+			Message: status.RetCode500,
+			Data: errors.ErrorModel{
+				Message:   "Failed to get sample name",
+				IsSuccess: false,
+				Error:     err,
+			},
+		})
+	}
+
+	return c.Status(200).JSON(response.ResponseModel{
+		RetCode: "200",
+		Message: "Success!",
+		Data:    results,
+	})
 }

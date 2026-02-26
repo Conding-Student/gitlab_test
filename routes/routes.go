@@ -13,4 +13,5 @@ func AppRoutes(app *fiber.App) {
 	// --------------------------
 
 	app.Post("insertnames", controller.Insert_name)
+	app.Get("getname", controller.Get_all_name)
 }
